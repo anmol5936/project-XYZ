@@ -24,28 +24,28 @@ const UserSetup: React.FC<UserSetupProps> = ({ onUserSetup }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4">
-        <div className="text-center mb-8">
-          <div className="bg-gradient-to-r from-blue-500 to-purple-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-            <User className="w-8 h-8 text-white" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
+      <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl p-10 w-full max-w-lg mx-4 border border-white/20">
+        <div className="text-center mb-10">
+          <div className="bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <User className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-3">
             Welcome to NIT Rourkela Feed
           </h1>
-          <p className="text-gray-600">
-            Join the campus community and start sharing updates
+          <p className="text-gray-600 text-lg leading-relaxed">
+            Join the campus community and start sharing updates with fellow students
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-8">
           <div className="form-group">
-            <label className="form-label">
+            <label className="block text-lg font-semibold text-gray-700 mb-3">
               What's your name?
             </label>
             <input
               type="text"
-              className="form-input"
+              className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl text-lg focus:border-blue-500 focus:ring-0 transition-colors duration-200 bg-white/50 backdrop-blur-sm"
               placeholder="Enter your full name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -57,24 +57,25 @@ const UserSetup: React.FC<UserSetupProps> = ({ onUserSetup }) => {
 
           <button
             type="submit"
-            className="btn btn-primary w-full"
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-2xl text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             disabled={loading || !name.trim()}
           >
             {loading ? (
-              <>
-                <div className="loading-spinner w-4 h-4"></div>
-                Setting up...
-              </>
+              <div className="flex items-center justify-center gap-3">
+                <div className="loading-spinner w-5 h-5"></div>
+                Setting up your profile...
+              </div>
             ) : (
               'Get Started'
             )}
           </button>
         </form>
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500">
-            No registration required • Cookie-based sessions
-          </p>
+        <div className="mt-8 text-center">
+          <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+            <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+            <p>No registration required • Secure cookie-based sessions</p>
+          </div>
         </div>
       </div>
     </div>

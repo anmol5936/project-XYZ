@@ -21,14 +21,19 @@ const Feed: React.FC<FeedProps> = ({ posts, currentUser, onPostUpdated, onCreate
   }
 
   return (
-    <div className="space-y-6">
-      {posts.map((post) => (
-        <PostCard
+    <div className="space-y-8 pb-8">
+      {posts.map((post, index) => (
+        <div 
           key={post._id}
-          post={post}
-          currentUser={currentUser}
-          onPostUpdated={onPostUpdated}
-        />
+          className="animate-fadeIn"
+          style={{ animationDelay: `${index * 0.1}s` }}
+        >
+          <PostCard
+            post={post}
+            currentUser={currentUser}
+            onPostUpdated={onPostUpdated}
+          />
+        </div>
       ))}
     </div>
   );

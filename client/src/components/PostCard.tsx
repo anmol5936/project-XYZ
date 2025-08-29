@@ -101,26 +101,28 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, onPostUpdated })
   };
 
   return (
-    <div className="card fade-in hover-lift">
+    <article className="card fade-in hover-lift">
       <div className="card-header">
         <div className="flex items-start justify-between">
-          <div className="flex items-start gap-3">
-            <div className="bg-gradient-to-r from-blue-400 to-purple-500 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-semibold text-sm">
+          <div className="flex items-start gap-4">
+            <div className="bg-gradient-to-br from-blue-400 via-purple-500 to-indigo-600 w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+              <span className="text-white font-bold text-lg">
                 {post.author.charAt(0).toUpperCase()}
               </span>
             </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <h4 className="font-semibold text-gray-900">{post.author}</h4>
-                <span className={getPostTypeBadge()}>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-3 mb-2">
+                <h4 className="font-bold text-gray-900 text-lg truncate">{post.author}</h4>
+                <span className={`${getPostTypeBadge()} flex items-center gap-1 px-3 py-1 text-xs font-semibold uppercase tracking-wide`}>
                   {getPostTypeIcon()}
                   {post.type === 'lostfound' ? 'Lost & Found' : post.type}
                 </span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-500">
-                <Clock className="w-3 h-3" />
-                {formatDate(post.createdAt)}
+                <Clock className="w-4 h-4" />
+                <time dateTime={post.createdAt} className="font-medium">
+                  {formatDate(post.createdAt)}
+                </time>
               </div>
             </div>
           </div>
@@ -128,13 +130,13 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, onPostUpdated })
       </div>
 
       <div className="card-body">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">{post.title}</h3>
-        <p className="text-gray-700 mb-4">{post.description}</p>
+        <h3 className="text-xl font-bold text-gray-900 mb-4 leading-tight">{post.title}</h3>
+        <p className="text-gray-700 leading-relaxed mb-6 text-base">{post.description}</p>
 
         {/* Type-specific content */}
         {post.type === 'event' && post.eventDetails && (
-          <div className="bg-blue-50 rounded-lg p-4 mb-4">
-            <div className="space-y-2 text-sm">
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 mb-6 border border-blue-100">
+            <div className="space-y-3 text-sm">
               {post.eventDetails.location && (
                 <div className="flex items-center gap-2 text-gray-700">
                   <MapPin className="w-4 h-4" />
@@ -150,32 +152,32 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, onPostUpdated })
             </div>
             
             {/* RSVP Section */}
-            <div className="mt-4 pt-4 border-t border-blue-200">
-              <div className="flex items-center gap-2 mb-3">
-                <Users className="w-4 h-4" />
-                <span className="text-sm font-medium">RSVP:</span>
-                <span className="text-sm text-gray-600">
-                  {post.eventDetails.rsvp.going.length} going, {post.eventDetails.rsvp.interested.length} interested
+            <div className="mt-6 pt-6 border-t border-blue-200/50">
+              <div className="flex items-center gap-3 mb-4">
+                <Users className="w-5 h-5 text-blue-600" />
+                <span className="text-base font-semibold text-gray-800">Event RSVP</span>
+                <span className="text-sm text-gray-600 bg-white/60 px-3 py-1 rounded-full">
+                  {post.eventDetails.rsvp.going.length} going • {post.eventDetails.rsvp.interested.length} interested
                 </span>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => handleRSVP('going')}
-                  className="btn btn-primary btn-sm"
+                  className="flex-1 min-w-[120px] bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg"
                 >
-                  Going ({post.eventDetails.rsvp.going.length})
+                  ✓ Going ({post.eventDetails.rsvp.going.length})
                 </button>
                 <button
                   onClick={() => handleRSVP('interested')}
-                  className="btn btn-secondary btn-sm"
+                  className="flex-1 min-w-[120px] bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg"
                 >
-                  Interested ({post.eventDetails.rsvp.interested.length})
+                  ★ Interested ({post.eventDetails.rsvp.interested.length})
                 </button>
                 <button
                   onClick={() => handleRSVP('notGoing')}
-                  className="btn btn-ghost btn-sm"
+                  className="flex-1 min-w-[120px] bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg"
                 >
-                  Not Going ({post.eventDetails.rsvp.notGoing.length})
+                  ✗ Can't Go ({post.eventDetails.rsvp.notGoing.length})
                 </button>
               </div>
             </div>
@@ -183,17 +185,18 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, onPostUpdated })
         )}
 
         {post.type === 'lostfound' && post.lostFoundDetails && (
-          <div className="bg-yellow-50 rounded-lg p-4 mb-4">
-            <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2 text-gray-700">
-                <span className="font-medium">
-                  {post.lostFoundDetails.itemType === 'lost' ? 'Lost Item' : 'Found Item'}
+          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-6 mb-6 border border-yellow-100">
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center gap-3">
+                <div className={`w-3 h-3 rounded-full ${post.lostFoundDetails.itemType === 'lost' ? 'bg-red-400' : 'bg-green-400'}`}></div>
+                <span className="font-bold text-gray-800 text-base">
+                  {post.lostFoundDetails.itemType === 'lost' ? '🔍 Lost Item' : '✨ Found Item'}
                 </span>
               </div>
               {post.lostFoundDetails.location && (
-                <div className="flex items-center gap-2 text-gray-700">
-                  <MapPin className="w-4 h-4" />
-                  {post.lostFoundDetails.location}
+                <div className="flex items-center gap-3 text-gray-700">
+                  <MapPin className="w-5 h-5 text-yellow-600" />
+                  <span className="font-medium">{post.lostFoundDetails.location}</span>
                 </div>
               )}
             </div>
@@ -201,17 +204,17 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, onPostUpdated })
         )}
 
         {post.type === 'announcement' && post.announcementDetails && (
-          <div className="bg-green-50 rounded-lg p-4 mb-4">
-            <div className="space-y-2 text-sm">
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 mb-6 border border-green-100">
+            <div className="space-y-3 text-sm">
               {post.announcementDetails.department && (
-                <div className="flex items-center gap-2 text-gray-700">
-                  <Building className="w-4 h-4" />
-                  {post.announcementDetails.department}
+                <div className="flex items-center gap-3 text-gray-700">
+                  <Building className="w-5 h-5 text-green-600" />
+                  <span className="font-bold text-gray-800 text-base">{post.announcementDetails.department}</span>
                 </div>
               )}
               <div className="flex items-center gap-2">
-                <span className={`badge badge-priority-${post.announcementDetails.priority}`}>
-                  {post.announcementDetails.priority} priority
+                <span className={`badge badge-priority-${post.announcementDetails.priority} text-xs font-bold px-3 py-2 rounded-full`}>
+                  {post.announcementDetails.priority.toUpperCase()} PRIORITY
                 </span>
               </div>
             </div>
@@ -295,7 +298,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, onPostUpdated })
           </div>
         )}
       </div>
-    </div>
+    </article>
   );
 };
 
