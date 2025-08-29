@@ -129,6 +129,34 @@ export const postsApi = {
   },
 };
 
+// Upload API
+export const uploadApi = {
+  // Upload single file (image or PDF)
+  uploadFile: async (file: File): Promise<{
+    success: boolean;
+    message: string;
+    file: {
+      filename: string;
+      originalName: string;
+      mimetype: string;
+      size: number;
+      url: string;
+      type: 'image' | 'pdf';
+    };
+  }> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await api.post('/upload/single', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    
+    return response.data;
+  },
+};
+
 // Health check
 export const healthApi = {
   check: async (): Promise<{ message: string; timestamp: string }> => {

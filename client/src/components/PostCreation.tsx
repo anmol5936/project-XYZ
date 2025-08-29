@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { X, Send, Edit3, Sparkles, Calendar, MapPin, Building, AlertTriangle } from 'lucide-react';
+import { X, Send, Edit3, Sparkles, Calendar, MapPin, Building, AlertTriangle, Paperclip } from 'lucide-react';
 import { User, AIClassification, CreatePostRequest } from '../types';
 import { aiApi, postsApi } from '../services/api';
+import FileUpload from './FileUpload';
 
 interface PostCreationProps {
   user: User;
@@ -24,6 +25,8 @@ const PostCreation: React.FC<PostCreationProps> = ({ user, onPostCreated, onCanc
   const [editedDate, setEditedDate] = useState('');
   const [editedDepartment, setEditedDepartment] = useState('');
   const [editedPriority, setEditedPriority] = useState<'low' | 'medium' | 'high'>('medium');
+  const [attachmentUrl, setAttachmentUrl] = useState('');
+  const [attachmentType, setAttachmentType] = useState<'image' | 'pdf' | null>(null);
 
   const handleClassify = async () => {
     if (!prompt.trim()) return;
@@ -79,12 +82,15 @@ const PostCreation: React.FC<PostCreationProps> = ({ user, onPostCreated, onCanc
         postData.lostFoundDetails = {
           itemType: classification.extractedData.itemType || 'lost',
           location: editedLocation,
-          contactInfo: 'Contact via this post'
+          contactInfo: 'Contact via this post',
+          imageUrl: attachmentType === 'image' ? attachmentUrl : undefined
         };
       } else if (classification.type === 'announcement') {
         postData.announcementDetails = {
           department: editedDepartment,
-          priority: editedPriority
+          priority: editedPriority,
+          attachmentUrl: attachmentUrl || undefined,
+          attachmentType: attachmentType || undefined
         };
       }
 
@@ -140,34 +146,50 @@ const PostCreation: React.FC<PostCreationProps> = ({ user, onPostCreated, onCanc
 
         {/* Content */}
         <div className="p-6 max-h-[calc(90vh-200px)] overflow-y-auto">
-          {step === 'input' && (
-            <div className="space-y-6">
-              <div className="form-group">
-                <label className="form-label">
-                  Describe what you want to share
-                </label>
-                <textarea
-                  className="form-textarea"
-                  placeholder="Examples:&#10;• Lost my black wallet near the library yesterday evening&#10;• Workshop on Docker tomorrow at 5pm in CSE Lab&#10;• Important notice from CSE Department about exam schedule"
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  rows={6}
-                  disabled={loading}
-                  autoFocus
-                />
-                <p className="text-sm text-gray-500 mt-2">
-                  Our AI will automatically determine the post type and extract relevant details
-                </p>
-              </div>
-
-              {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3">
-                  <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0" />
-                  <p className="text-red-700">{error}</p>
-                </div>
-              )}
+                  {step === 'input' && (
+          <div className="space-y-6">
+            <div className="form-group">
+              <label className="form-label">
+                Describe what you want to share
+              </label>
+              <textarea
+                className="form-textarea"
+                placeholder="Examples:&#10;• Lost my black wallet near the library yesterday evening&#10;• Workshop on Docker tomorrow at 5pm in CSE Lab&#10;• Important notice from CSE Department about exam schedule"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                rows={6}
+                disabled={loading}
+                autoFocus
+              />
+              <p className="text-sm text-gray-500 mt-2">
+                Our AI will automatically determine the post type and extract relevant details
+              </p>
             </div>
-          )}
+
+            <div className="form-group">
+              <label className="form-label flex items-center gap-2">
+                <Paperclip className="w-4 h-4" />
+                Attach Image or PDF (Optional)
+              </label>
+              <FileUpload
+                onFileUploaded={(url, type) => {
+                  setAttachmentUrl(url);
+                  setAttachmentType(type);
+                }}
+              />
+              <p className="text-sm text-gray-500 mt-2">
+                You can attach images for lost & found items or PDF documents for announcements
+              </p>
+            </div>
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3">
+                <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                <p className="text-red-700">{error}</p>
+              </div>
+            )}
+          </div>
+        )}
 
           {step === 'preview' && classification && (
             <div className="space-y-6">

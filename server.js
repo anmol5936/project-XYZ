@@ -10,6 +10,7 @@ const config = require('./config');
 const postRoutes = require('./routes/posts');
 const aiRoutes = require('./routes/ai');
 const userRoutes = require('./routes/users');
+const uploadRoutes = require('./routes/upload');
 
 const app = express();
 
@@ -37,6 +38,10 @@ mongoose.connect(config.MONGODB_URI, {
 app.use('/api/posts', postRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/upload', uploadRoutes);
+
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Serve static files from React app in production
 if (config.NODE_ENV === 'production') {

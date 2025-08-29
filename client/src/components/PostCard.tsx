@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, Building, Heart, MessageCircle, Users, Clock, Reply } from 'lucide-react';
+import { Calendar, MapPin, Building, Heart, MessageCircle, Users, Clock, Reply, FileText, ExternalLink } from 'lucide-react';
 import { Post, User } from '../types';
 import { postsApi } from '../services/api';
 import ReactionPicker from './ReactionPicker';
@@ -199,6 +199,18 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, onPostUpdated })
                   <span className="font-medium">{post.lostFoundDetails.location}</span>
                 </div>
               )}
+              
+              {/* Image Display for Lost & Found */}
+              {post.lostFoundDetails.imageUrl && (
+                <div className="mt-4 pt-4 border-t border-yellow-200/50">
+                  <img
+                    src={post.lostFoundDetails.imageUrl}
+                    alt={`${post.lostFoundDetails.itemType} item`}
+                    className="w-full max-w-sm rounded-xl shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                    onClick={() => window.open(post.lostFoundDetails.imageUrl, '_blank')}
+                  />
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -217,6 +229,28 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, onPostUpdated })
                   {post.announcementDetails.priority.toUpperCase()} PRIORITY
                 </span>
               </div>
+              
+              {/* Attachment Display */}
+              {post.announcementDetails.attachmentUrl && (
+                <div className="mt-4 pt-4 border-t border-green-200/50">
+                  <div className="flex items-center gap-3">
+                    <FileText className="w-5 h-5 text-green-600" />
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-800 text-sm">
+                        {post.announcementDetails.attachmentType === 'pdf' ? 'PDF Document' : 'Image Attachment'}
+                      </p>
+                      <a
+                        href={post.announcementDetails.attachmentUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-green-600 hover:text-green-700 text-sm font-medium flex items-center gap-1 mt-1"
+                      >
+                        View Attachment <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
