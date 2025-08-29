@@ -1,0 +1,32 @@
+{
+  "name": "nit-rourkela-feed",
+  "version": "1.0.0",
+  "description": "Campus feed app for NIT Rourkela - AI Hackathon Challenge",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "concurrently \"nodemon server.js\" \"cd client && npm start\"",
+    "server": "nodemon server.js",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.5.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "multer": "^1.4.5-lts.1",
+    "axios": "^1.5.0",
+    "openai": "^4.20.1",
+    "cookie-parser": "^1.4.6",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "concurrently": "^8.2.1"
+  },
+  "keywords": ["campus", "feed", "ai", "nit-rourkela", "mern"],
+  "author": "NIT Rourkela Hackathon Team",
+  "license": "MIT"
+}
